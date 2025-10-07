@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Habit Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1> Daily Habit Tracker</h1>
+            <p class="subtitle">Build better habits, one day at a time</p>
+        </header>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-value" id="totalHabits">0</div>
+                <div class="stat-label">Total Habits</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="todayComplete">0</div>
+                <div class="stat-label">Completed Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="completionRate">0%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="longestStreak">0</div>
+                <div class="stat-label">Best Streak</div>
+            </div>
+        </div>
+
+        <!-- Add Habit Section -->
+        <div class="add-habit-section">
+            <button class="btn-primary" id="addHabitBtn">+ Add New Habit</button>
+        </div>
+
+        <!-- Add Habit Modal -->
+        <div class="modal" id="habitModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Create New Habit</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <form id="habitForm">
+                    <div class="form-group">
+                        <label>Habit Name</label>
+                        <input type="text" id="habitName" placeholder="e.g., Drink 8 glasses of water" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="habitCategory">
+                            <option value="health">🏃 Health</option>
+                            <option value="productivity">💼 Productivity</option>
+                            <option value="mindfulness">🧘 Mindfulness</option>
+                            <option value="learning">📚 Learning</option>
+                            <option value="social">👥 Social</option>
+                            <option value="other">⭐ Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <div class="color-picker">
+                            <input type="radio" name="color" value="#FF6B6B" id="color1" checked>
+                            <label for="color1" style="background: #FF6B6B;"></label>
+
+                            <input type="radio" name="color" value="#4ECDC4" id="color2">
+                            <label for="color2" style="background: #4ECDC4;"></label>
+
+                            <input type="radio" name="color" value="#45B7D1" id="color3">
+                            <label for="color3" style="background: #45B7D1;"></label>
+
+                            <input type="radio" name="color" value="#FFA07A" id="color4">
+                            <label for="color4" style="background: #FFA07A;"></label>
+
+                            <input type="radio" name="color" value="#98D8C8" id="color5">
+                            <label for="color5" style="background: #98D8C8;"></label>
+
+                            <input type="radio" name="color" value="#F7DC6F" id="color6">
+                            <label for="color6" style="background: #F7DC6F;"></label>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-primary">Create Habit</button>
+                        <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Filter & View Toggle -->
+        <div class="controls">
+            <div class="filter-section">
+                <label>Filter:</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="health">🏃 Health</option>
+                    <option value="productivity">💼 Productivity</option>
+                    <option value="mindfulness">🧘 Mindfulness</option>
+                    <option value="learning">📚 Learning</option>
+                    <option value="social">👥 Social</option>
+                    <option value="other">⭐ Other</option>
+                </select>
+            </div>
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="daily">Daily</button>
+                <button class="view-btn" data-view="calendar">Calendar</button>
+                <button class="view-btn" data-view="stats">Statistics</button>
+            </div>
+        </div>
+
+        <!-- Daily View -->
+        <div class="view-content" id="dailyView">
+            <h2 class="view-title">Today's Habits</h2>
+            <div class="date-display" id="currentDate"></div>
+            <div class="habits-list" id="habitsList">
+                <!-- Habits will be rendered here -->
+            </div>
+            <div class="empty-state" id="emptyState">
+                <p>📝 No habits yet. Create your first habit to get started!</p>
+            </div>
+        </div>
+
+        <!-- Calendar View -->
+        <div class="view-content hidden" id="calendarView">
+            <h2 class="view-title">Monthly Overview</h2>
+            <div class="calendar-header">
+                <button class="btn-nav" id="prevMonth">&lt;</button>
+                <span id="calendarMonth"></span>
+                <button class="btn-nav" id="nextMonth">&gt;</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar will be rendered here -->
+            </div>
+            <div class="calendar-legend">
+                <span><span class="legend-box" style="background: #e8f5e9;"></span> Partial</span>
+                <span><span class="legend-box" style="background: #4caf50;"></span> Complete</span>
+                <span><span class="legend-box" style="background: #ffebee;"></span> Missed</span>
+            </div>
+        </div>
+
+        <!-- Statistics View -->
+        <div class="view-content hidden" id="statsView">
+            <h2 class="view-title">Habit Statistics</h2>
+            <div class="stats-list" id="statsList">
+                <!-- Stats will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
